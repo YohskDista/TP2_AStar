@@ -1,14 +1,17 @@
 __author__ = 'leonardo.distasio'
 
-dictConnections = {}
-dictPositions = {}
+from Node import Node
+
+dictConnectionsQuantity = {}
+dictNodes = {}
 
 def positionsParse(positions):
     lines = positions.split("\n")
 
     for line in lines:
         word = line.split(" ")
-        dictPositions[word[0]] = {"x" : word[1], "y" : word[2]}
+        node = Node(word[0], word[1], word[2])
+        dictNodes[word[0]] = node
 
 def connectionsParse(connections):
     lines = connections.split("\n")
@@ -16,10 +19,18 @@ def connectionsParse(connections):
     for line in lines:
         word = line.split(" ")
 
-        if(word[0] in dictConnections):
-            dictConnections[word[0]].update({word[1] : word[2]})
+        parentNode = dictNodes[word[0]]
+        nodeChild = dictNodes[word[1]]
+
+        parentNode.addChild(nodeChild)
+
+        if(word[0] in dictConnectionsQuantity):
+            dictConnectionsQuantity[word[0]].update({word[1] : word[2]})
         else:
-            dictConnections[word[0]] = {word[1] : word[2]}
+            dictConnectionsQuantity[word[0]] = {word[1] : word[2]}
+
+def astar(villeA, villeB, heuristique):
+    print("astar")
 
 if __name__ == "__main__":
 
@@ -29,6 +40,8 @@ if __name__ == "__main__":
     connections = fileConnections.read()
     positions = filePositions.read()
 
-    connectionsParse(connections)
     positionsParse(positions)
+    connectionsParse(connections)
+
+    astar("Munich", "Trieste", None)
 
