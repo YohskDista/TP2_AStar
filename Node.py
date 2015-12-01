@@ -11,8 +11,8 @@ class Node(object):
     def __repr__(self):
         return self.city
 
-    def __lt__(self, node):
-        return self.quality < node.quality
+    def getChild(self):
+        return self.listChild
 
     def addChild(self, node):
         self.listChild.append(node)

@@ -4,6 +4,8 @@ __author__ = 'leonardo.distasio & kevin.vulliemin'
 # historique : liste des villes visitées
 
 from Node import Node
+from State import State
+from math import sqrt
 
 dictConnectionsQuantity = {}
 dictNodes = {}
@@ -22,37 +24,77 @@ def connectionsParse(connections):
     for line in lines:
         word = line.split(" ")
 
-        parentNode = dictNodes[word[0]]
-        nodeChild = dictNodes[word[1]]
-
-        parentNode.addChild(nodeChild)
-
-        if(word[0] in dictConnectionsQuantity):
+        if(word[0] in dictConnectionsQuantity and word[1] in dictConnectionsQuantity):
             dictConnectionsQuantity[word[0]].update({word[1] : word[2]})
+            dictConnectionsQuantity[word[1]].update({word[0] : word[2]})
         else:
-            dictConnectionsQuantity[word[0]] = {word[1] : word[2]}
+            if(word[0] in dictConnectionsQuantity):
+                dictConnectionsQuantity[word[0]].update({word[1] : word[2]})
+            else:
+                dictConnectionsQuantity[word[0]] = {word[1] : word[2]}
+            if(word[1] in dictConnectionsQuantity):
+                dictConnectionsQuantity[word[1]].update({word[0] : word[2]})
+            else:
+                dictConnectionsQuantity[word[1]] = {word[0] : word[2]}
+
+def insertChild():
+    for city in dictConnectionsQuantity.keys():
+        node = dictNodes[city]
+        for child in dictConnectionsQuantity[city]:
+            node.addChild(dictNodes[child])
+
+def connection(node1, node2):
+    return int(dictConnectionsQuantity[node1.city][node2.city])
 
 def h0(node1, node2):
-    print("h0")
+    return 0
 
 def h1(node1, node2):
-    print("h1")
+    return int(node2.x) - int(node1.x)
 
 def h2(node1, node2):
-    print("h2")
+    return int(node2.y) - int(node1.y)
 
 def h3(node1, node2):
-    print("h3")
+    return sqrt((int(node2.x) - int(node1.x))**2 + (int(node2.y) - int(node1.y))**2)
 
 def h4(node1, node2):
-    print("h4")
+    return abs(int(node2.x) - int(node1.x)) + abs(int(node2.y) - int(node1.y))
 
 def astar(villeA, villeB, heuristique):
-    print("astar")
     initNode = dictNodes[villeA]
     endNode = dictNodes[villeB]
 
-    heuristique(initNode, endNode)
+    state0 = State(initNode, 0, None)
+
+    frontiere = [state0]
+    history = []
+
+    while frontiere :
+        etat = frontiere.pop(0)
+        history.append(etat.node)
+
+        if etat.node == endNode:
+            return etat
+
+        child = etat.getChild()
+
+        for op in child :
+            new = etat.apply(op)
+            new.g = new.g + connection(etat.node, new.node)
+            new.f = new.g + heuristique(new.node, endNode)
+
+            if (not isInFrontiere(frontiere, new)) and (op not in history):
+                frontiere.append(new)
+
+        frontiere.sort()
+    return "Pas de solution"
+
+def isInFrontiere(frontiere, state):
+    for s in frontiere:
+        if s.node.city == state.node.city :
+            return True
+    return False
 
 if __name__ == "__main__":
 
@@ -64,10 +106,30 @@ if __name__ == "__main__":
 
     positionsParse(positions)
     connectionsParse(connections)
+    insertChild()
 
-    astar("Munich", "Trieste", h0)
-    astar("Munich", "Trieste", h1)
-    astar("Munich", "Trieste", h2)
-    astar("Munich", "Trieste", h3)
-    astar("Munich", "Trieste", h4)
+    ville1 = "Lisbon"
+    ville2 = "Munich"
+
+    etat0 = astar(ville1, ville2, h0)
+    etat1 = astar(ville1, ville2, h1)
+    etat2 = astar(ville1, ville2, h2)
+    etat3 = astar(ville1, ville2, h3)
+    etat4 = astar(ville1, ville2, h4)
+
+    if(etat0 != "Pas de solution"):
+        print("\nHeuristique H0")
+        etat0.printChemin()
+    if(etat1 != "Pas de solution"):
+        print("\nHeuristique H1")
+        etat1.printChemin()
+    if(etat2 != "Pas de solution"):
+        print("\nHeuristique H2")
+        etat2.printChemin()
+    if(etat3 != "Pas de solution"):
+        print("\nHeuristique H3")
+        etat3.printChemin()
+    if(etat4 != "Pas de solution"):
+        print("\nHeuristique H4")
+        etat4.printChemin()
 
