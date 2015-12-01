@@ -1,4 +1,7 @@
-__author__ = 'leonardo.distasio'
+__author__ = 'leonardo.distasio & kevin.vulliemin'
+
+# frontière : liste des villes à visiter
+# historique : liste des villes visitées
 
 from Node import Node
 
@@ -29,8 +32,27 @@ def connectionsParse(connections):
         else:
             dictConnectionsQuantity[word[0]] = {word[1] : word[2]}
 
+def h0(node1, node2):
+    print("h0")
+
+def h1(node1, node2):
+    print("h1")
+
+def h2(node1, node2):
+    print("h2")
+
+def h3(node1, node2):
+    print("h3")
+
+def h4(node1, node2):
+    print("h4")
+
 def astar(villeA, villeB, heuristique):
     print("astar")
+    initNode = dictNodes[villeA]
+    endNode = dictNodes[villeB]
+
+    heuristique(initNode, endNode)
 
 if __name__ == "__main__":
 
@@ -43,5 +65,9 @@ if __name__ == "__main__":
     positionsParse(positions)
     connectionsParse(connections)
 
-    astar("Munich", "Trieste", None)
+    astar("Munich", "Trieste", h0)
+    astar("Munich", "Trieste", h1)
+    astar("Munich", "Trieste", h2)
+    astar("Munich", "Trieste", h3)
+    astar("Munich", "Trieste", h4)
 
