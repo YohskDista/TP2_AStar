@@ -96,6 +96,13 @@ def isInFrontiere(frontiere, state):
             return True
     return False
 
+def verifyAndPrintHeuristique(state, h):
+    if(state != "Pas de solution"):
+        print("\nHeuristique %s" % h)
+        state.printChemin()
+    else:
+        print("Pas de solution pour %s" % h)
+
 if __name__ == "__main__":
 
     fileConnections = open("data/connections.txt", "r")
@@ -117,19 +124,9 @@ if __name__ == "__main__":
     etat3 = astar(ville1, ville2, h3)
     etat4 = astar(ville1, ville2, h4)
 
-    if(etat0 != "Pas de solution"):
-        print("\nHeuristique H0")
-        etat0.printChemin()
-    if(etat1 != "Pas de solution"):
-        print("\nHeuristique H1")
-        etat1.printChemin()
-    if(etat2 != "Pas de solution"):
-        print("\nHeuristique H2")
-        etat2.printChemin()
-    if(etat3 != "Pas de solution"):
-        print("\nHeuristique H3")
-        etat3.printChemin()
-    if(etat4 != "Pas de solution"):
-        print("\nHeuristique H4")
-        etat4.printChemin()
+    verifyAndPrintHeuristique(etat0, "H0")
+    verifyAndPrintHeuristique(etat1, "H1")
+    verifyAndPrintHeuristique(etat2, "H2")
+    verifyAndPrintHeuristique(etat3, "H3")
+    verifyAndPrintHeuristique(etat4, "H4")
 
