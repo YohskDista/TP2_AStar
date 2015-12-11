@@ -59,7 +59,7 @@ def h3(node1, node2):
     return sqrt((int(node2.x) - int(node1.x))**2 + (int(node2.y) - int(node1.y))**2)
 
 def h4(node1, node2):
-    return abs(int(node2.x) - int(node1.x)) + abs(int(node2.y) - int(node1.y))
+    return abs(h1(node1, node2)) + abs(h2(node1, node2))
 
 def astar(villeA, villeB, heuristique):
     initNode = dictNodes[villeA]
@@ -115,8 +115,8 @@ if __name__ == "__main__":
     connectionsParse(connections)
     insertChild()
 
-    ville1 = "Lisbon"
-    ville2 = "Munich"
+    ville1 = "Warsaw"
+    ville2 = "Lisbon"
 
     etat0 = astar(ville1, ville2, h0)
     etat1 = astar(ville1, ville2, h1)
