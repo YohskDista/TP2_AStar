@@ -1,5 +1,23 @@
 __author__ = 'leonardo.distasio & kevin.vulliemin'
 
+""" Réponse aux questions :
+
+    Influence efficacité selon heuristique ?
+        Réponse : Oui ça a une influence, il peut y avoir presque une dizaine de ville visitée en plus selon
+                  l'heuristique que l'on utilise.
+
+    Chemin heuristique différent ?
+        Réponse : Ville de Warsaw à Lisbon
+            H0 : 19 villes
+            H1 : 17 villes
+            H2 : 19 villes
+            H3 : 17 villes
+            H4 : 11 villes
+
+    Quelle heuristique choisir ?
+        Réponse : H4, plus performant et moins de ville visitée
+"""
+
 # frontière : liste des villes à visiter
 # historique : liste des villes visitées
 
@@ -105,7 +123,13 @@ def astar(villeA, villeB, heuristique):
         etat = frontiere.pop(0)
         history.append(etat.node)
 
+        print("Frontière : ", end="")
+        print(frontiere)
+        print("Histoire : ", end="")
+        print(history)
+
         if etat.node == endNode:
+            print("Nombre de ville visitée : %d" % len(history))
             return etat
 
         child = etat.getChild()
@@ -133,7 +157,7 @@ def isInFrontiere(frontiere, state):
 # Test s'il y a une solution et l'affiche
 def verifyAndPrintHeuristique(state, h):
     if(state != "Pas de solution"):
-        print("\nHeuristique %s" % h)
+        print("")
         state.printChemin()
     else:
         print("Pas de solution pour %s" % h)
@@ -154,15 +178,28 @@ if __name__ == "__main__":
     ville2 = "Lisbon"
 
     # Calcul de toutes les heuristiques
+    print("Heuristique H0")
     etat0 = astar(ville1, ville2, h0)
-    etat1 = astar(ville1, ville2, h1)
-    etat2 = astar(ville1, ville2, h2)
-    etat3 = astar(ville1, ville2, h3)
-    etat4 = astar(ville1, ville2, h4)
-
     verifyAndPrintHeuristique(etat0, "H0")
+    print("")
+
+    print("Heuristique H1")
+    etat1 = astar(ville1, ville2, h1)
     verifyAndPrintHeuristique(etat1, "H1")
+    print("")
+
+    print("Heuristique H2")
+    etat2 = astar(ville1, ville2, h2)
     verifyAndPrintHeuristique(etat2, "H2")
+    print("")
+
+    print("Heuristique H3")
+    etat3 = astar(ville1, ville2, h3)
     verifyAndPrintHeuristique(etat3, "H3")
+    print("")
+
+    print("Heuristique H4")
+    etat4 = astar(ville1, ville2, h4)
     verifyAndPrintHeuristique(etat4, "H4")
+    print("")
 
