@@ -9,6 +9,7 @@ class State:
 
         self.f = 0
 
+    # Fonction de comparaison
     def __lt__(self, other):
         return self.f < other.f
 
@@ -16,10 +17,9 @@ class State:
         return self.node.city
 
     def __contains__(self, item):
-        print("Coucou : ", end="")
-        print(item)
         return self.node.city == item.node.city
 
+    # Affichage du chemin avec les enfants
     def printChemin(self):
         par = self
         while(par != None):
@@ -28,6 +28,7 @@ class State:
             par = par.parent
         print("")
 
+    # Renvoi les enfants du Node
     def getChild(self):
         return self.node.getChild()
 
